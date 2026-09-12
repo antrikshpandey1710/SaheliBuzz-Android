@@ -39,7 +39,7 @@ class FirebaseRepository {
                         PostPage(
                             posts = posts,
                             lastDocument = lastDocument,
-                            hasMore = snapshot.size() == PAGE_SIZE
+                            hasMore = snapshot.size() == PAGE_SIZE.toInt()
                         )
                     )
                 )
@@ -73,7 +73,7 @@ class FirebaseRepository {
                         PostPage(
                             posts = posts,
                             lastDocument = newLastDocument,
-                            hasMore = snapshot.size() == PAGE_SIZE
+                            hasMore = snapshot.size() == PAGE_SIZE.toInt()
                         )
                     )
                 )
