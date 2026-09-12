@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "622040608215",
+    "project_id": "sahelibuzz-cedd9",
+    "storage_bucket": "sahelibuzz-cedd9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622040608215:android:5d1277a1e33c7de9d02f92",
+        "android_client_info": {
+          "package_name": "com.sahelibuzz.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "622040608215-pho605kg634mf64on57rqmrg0ugb79vr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWEPqodgVScHvfUum_2et22OvytUBg18I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "622040608215-pho605kg634mf64on57rqmrg0ugb79vr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
