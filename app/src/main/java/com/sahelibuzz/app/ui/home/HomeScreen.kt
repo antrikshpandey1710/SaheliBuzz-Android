@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,17 +17,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.sahelibuzz.app.data.models.Post
 
 @Composable
 fun HomeScreen(
+    contentPadding: PaddingValues = PaddingValues(),
     viewModel: HomeViewModel = remember { HomeViewModel() }
 ) {
     val state = viewModel.uiState
@@ -58,6 +59,7 @@ fun HomeScreen(
         else -> {
             PostFeed(
                 posts = state.posts,
+                contentPadding = contentPadding,
                 isLoadingMore = state.isLoadingMore,
                 hasMore = state.hasMore,
                 onLoadMore = {
@@ -71,13 +73,19 @@ fun HomeScreen(
 @Composable
 private fun PostFeed(
     posts: List<Post>,
+    contentPadding: PaddingValues,
     isLoadingMore: Boolean,
     hasMore: Boolean,
     onLoadMore: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 12.dp),
+        contentPadding = PaddingValues(
+            start = contentPadding.calculateStartPadding(LayoutDirection.Ltr),
+            top = contentPadding.calculateTopPadding() + 12.dp,
+            end = contentPadding.calculateEndPadding(LayoutDirection.Ltr),
+            bottom = contentPadding.calculateBottomPadding() + 12.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
@@ -118,7 +126,10 @@ private fun PostItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(
+                horizontal = 16.dp,
+                vertical = 10.dp
+            )
     ) {
         Text(
             text = if (post.username.isNotBlank()) {
