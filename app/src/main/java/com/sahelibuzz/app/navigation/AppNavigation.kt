@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sahelibuzz.app.ui.home.HomeScreen
 
 object AppRoutes {
     const val HOME = "home"
@@ -32,46 +33,21 @@ fun AppNavigation(
         }
 
         composable(AppRoutes.SEARCH) {
-            SearchScreen()
+            PlaceholderScreen(title = "Search")
         }
 
         composable(AppRoutes.NOTIFICATIONS) {
-            NotificationsScreen()
+            PlaceholderScreen(title = "Notifications")
         }
 
         composable(AppRoutes.PROFILE) {
-            ProfileScreen()
+            PlaceholderScreen(title = "Profile")
         }
 
         composable(AppRoutes.CHAT) {
-            ChatScreen()
+            PlaceholderScreen(title = "Chat")
         }
     }
-}
-
-@Composable
-private fun HomeScreen() {
-    PlaceholderScreen(title = "Home")
-}
-
-@Composable
-private fun SearchScreen() {
-    PlaceholderScreen(title = "Search")
-}
-
-@Composable
-private fun NotificationsScreen() {
-    PlaceholderScreen(title = "Notifications")
-}
-
-@Composable
-private fun ProfileScreen() {
-    PlaceholderScreen(title = "Profile")
-}
-
-@Composable
-private fun ChatScreen() {
-    PlaceholderScreen(title = "Chat")
 }
 
 @Composable
