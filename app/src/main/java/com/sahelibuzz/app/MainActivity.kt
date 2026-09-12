@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
 
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
 fun SaheliBuzzAuth() {
 
     val auth = remember { FirebaseAuth.getInstance() }
+    val db = remember { FirebaseFirestore.getInstance() }
 
     var isSignUp by remember { mutableStateOf(false) }
 
@@ -133,6 +136,7 @@ fun SaheliBuzzAuth() {
                     onClick = {
 
                         val cleanEmail = email.trim()
+
                         val cleanUsername = username
                             .trim()
                             .lowercase()
@@ -149,8 +153,7 @@ fun SaheliBuzzAuth() {
                         }
 
                         if (isSignUp && cleanUsername.length < 3) {
-                            message =
-                                "Username must be at least 3 characters."
+                            message = "Username must be at least 3 characters."
                             return@Button
                         }
 
@@ -164,16 +167,49 @@ fun SaheliBuzzAuth() {
                                 password
                             ).addOnCompleteListener { task ->
 
-                                isLoading = false
-
-                                if (task.isSuccessful) {
-                                    message =
-                                        "Account created successfully."
-                                } else {
+                                if (!task.isSuccessful) {
+                                    isLoading = false
                                     message =
                                         task.exception?.message
                                             ?: "Unable to create account."
+                                    return@addOnCompleteListener
                                 }
+
+                                val userId = auth.currentUser?.uid
+
+                                if (userId == null) {
+                                    isLoading = false
+                                    message = "Account created, but user ID was unavailable."
+                                    return@addOnCompleteListener
+                                }
+
+                                val userProfile = hashMapOf(
+                                    "id" to userId,
+                                    "username" to cleanUsername,
+                                    "email" to cleanEmail,
+                                    "followersCount" to 0,
+                                    "followingCount" to 0,
+                                    "bio" to "Hey there! I am using SaheliBuzz.",
+                                    "photoURL" to "https://api.dicebear.com/7.x/adventurer/svg?seed=$cleanUsername",
+                                    "createdAt" to Date().toString()
+                                )
+
+                                db.collection("users")
+                                    .document(userId)
+                                    .set(userProfile)
+                                    .addOnSuccessListener {
+
+                                        isLoading = false
+                                        message =
+                                            "Account created successfully."
+
+                                    }
+                                    .addOnFailureListener { error ->
+
+                                        isLoading = false
+                                        message =
+                                            "Account created, but profile setup failed: ${error.message}"
+                                    }
                             }
 
                         } else {
@@ -186,8 +222,7 @@ fun SaheliBuzzAuth() {
                                 isLoading = false
 
                                 if (task.isSuccessful) {
-                                    message =
-                                        "Login successful."
+                                    message = "Login successful."
                                 } else {
                                     message =
                                         task.exception?.message
@@ -233,8 +268,7 @@ fun SaheliBuzzAuth() {
                         val cleanEmail = email.trim()
 
                         if (cleanEmail.isEmpty()) {
-                            message =
-                                "Enter your email first."
+                            message = "Enter your email first."
                             return@OutlinedButton
                         }
 
